@@ -41,8 +41,6 @@ exports.handler = async (events) => {
         const shortCode = generateUniqueKey(6)
 
         // Save to db
-        console.log("Table Name ===> ", TABLE_NAME, shortCode)
-
         const item = {
             code: shortCode,
             url: originalURL,

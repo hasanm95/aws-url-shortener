@@ -50,6 +50,9 @@ Resources:
       Policies: 
         - DynamoDBReadPolicy:
             TableName: !Ref UrlShortenerTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref UrlShortenerTable 
       Events:
         RedirectRoute:
           Type: HttpApi
