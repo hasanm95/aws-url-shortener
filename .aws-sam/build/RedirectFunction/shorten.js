@@ -44,6 +44,7 @@ exports.handler = async (events) => {
         const item = {
             code: shortCode,
             url: originalURL,
+            clickCount: 0,
             createdAt: new Date().toISOString()
         }
 

@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, GetCommand, UpdateCommand } = require("@aws-sdk/lib-dynamodb");
 
 const dbClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dbClient);
@@ -43,6 +43,20 @@ exports.handler = async (event) => {
                 })
             };
         }
+
+        // Increment click count
+        const updateDbCommand = new UpdateCommand({
+            TableName: TABLE_NAME,
+            Key: {
+                code: shortCode
+            },
+            UpdateExpression: "SET clickCount = if_not_exists(clickCount, :start) + :inc",
+            ExpressionAttributeValues: {
+                ":inc": 1,
+                ":start": 0
+            }
+        })
+        docClient.send(updateDbCommand).catch(err => console.error("Background analytics update failed:", err))
 
         // Return HTTP 301 Redirect
         return {
