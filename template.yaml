@@ -30,6 +30,9 @@ Resources:
       Policies: 
         - DynamoDBCrudPolicy:
             TableName: !Ref UrlShortenerTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref UrlShortenerTable 
       Events:
         ShortenRoute:
           Type: HttpApi
@@ -54,3 +57,8 @@ Resources:
             Path: /{code}
             Method: GET 
             ApiId: !Ref HttpApiGateway
+
+Outputs:
+  UrlShortenerApiUrl:
+    Description: "The public endpoint URL of your Shortener API Gateway"
+    Value: !Sub "https://${HttpApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
