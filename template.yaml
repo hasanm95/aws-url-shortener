@@ -13,3 +13,10 @@ Resources:
       DefaultRouteSettings:
         ThrottlingRateLimit: 50
         ThrottlingBurstLimit: 100
+  
+  UrlShortenerTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: code 
+        Type: String
