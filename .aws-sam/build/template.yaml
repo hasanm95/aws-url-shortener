@@ -23,3 +23,43 @@ Resources:
       PrimaryKey:
         Name: code
         Type: String
+  UrlShortenerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: shorten.handler
+      Runtime: nodejs24.x
+      CodeUri: UrlShortenerFunction
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UrlShortenerTable
+      Events:
+        ShortenRoute:
+          Type: HttpApi
+          Properties:
+            Path: /shorten
+            Method: POST
+            ApiId:
+              Ref: HttpApiGateway
+    Metadata:
+      SamResourceId: UrlShortenerFunction
+  RedirectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: redirect.handler
+      Runtime: nodejs24.x
+      CodeUri: RedirectFunction
+      Policies:
+      - DynamoDBReadPolicy:
+          TableName:
+            Ref: UrlShortenerTable
+      Events:
+        RedirectRoute:
+          Type: HttpApi
+          Properties:
+            Path: /{code}
+            Method: GET
+            ApiId:
+              Ref: HttpApiGateway
+    Metadata:
+      SamResourceId: RedirectFunction
